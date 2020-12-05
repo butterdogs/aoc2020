@@ -21,4 +21,4 @@ splitOn f (x:xs) =
     else (x:xs',xs'') where
         (xs',xs'') = splitOn f xs
 
-splitOnChar c = splitOn (\x -> x == c)
+splitOnChar c = splitOn (==c)
