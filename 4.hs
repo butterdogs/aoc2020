@@ -1,5 +1,4 @@
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE NoMonomorphismRestriction #-}
 module Main where
 import Funs
 import qualified Data.Set as S
@@ -24,8 +23,8 @@ parseHt = do
         "cm" -> return $ Centimeters inum
         "in" -> return $ Inches inum
 
-bad _ = False
-good _ = True
+bad = const False
+good = const True
 ifParse parser str = either bad good $ (parse parser "" str)
 
 validStr :: (String,String) -> Bool
@@ -49,7 +48,10 @@ valid s = (S.difference reqs (S.map fst s) == S.empty)
 fields :: String -> S.Set (String,String)
 fields = S.fromList.(map (splitOnChar ':') ).words
 
-testStr = "aoeu\nxyz\n\nebc\nec"
+
+
+process :: String -> String
+process inp = show $ length.filter id $ map (valid.fields) (bigLines inp)
 
 bigLines :: String -> [String]
 bigLines s = map (intercalate " ") $ unfoldr doLines (lines s)
@@ -57,9 +59,6 @@ bigLines s = map (intercalate " ") $ unfoldr doLines (lines s)
     doLines ss = case splitOn (=="") ss of
         ([],ss) -> Nothing
         (ss',ss) -> Just (ss',ss)
-
-process :: String -> String
-process inp = show $ length.filter id $ map (valid.fields) (bigLines inp)
 
 
 valid1 = "pid:087499704 hgt:74in ecl:grn iyr:2012 eyr:2030 byr:1980 hcl:#623a2f"
@@ -90,4 +89,3 @@ tests = [
 main = do
     --print tests
     interact process
-    --print ()

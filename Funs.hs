@@ -7,6 +7,7 @@ readLines = do
         "" -> return []
         l -> (l:)<$>readLines
 
+
 readLoA :: Read a => IO [a]
 readLoA = do
     l <- getLine
