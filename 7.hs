@@ -70,7 +70,6 @@ countBags (BagRule _ rules) pool = let
         in i * (sum recur)
     in 1 + (sum $ map countFromRule rules)
 
--- 34864 (too high)
 
 main = do
     inp <- readLines
